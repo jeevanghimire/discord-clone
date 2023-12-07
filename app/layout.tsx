@@ -3,6 +3,7 @@ import { Open_Sans } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ThemeProvider } from "@/components/provider/theme-provider";
+import { cn } from "@/lib/utils";
 
 const Font = Open_Sans({ subsets: ["latin"] });
 
@@ -10,7 +11,6 @@ export const metadata: Metadata = {
   title: "Clone",
   description: "clone of Discord",
 };
-
 export default function RootLayout({
   children,
 }: {
@@ -19,7 +19,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={Font.className}>
+        <body className={cn( Font.className,
+          "bg-white dark:bg-[#313338]"
+          
+          )}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark" 
