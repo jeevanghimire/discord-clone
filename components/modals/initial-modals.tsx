@@ -1,7 +1,7 @@
 "use client"
 import *as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form"
+import{ useForm } from "react-hook-form";
 import {
     Dialog,
     DialogContent,
@@ -10,7 +10,11 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
-
+import {Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form"
+import { Input } from "../ui/input";
+import { isLoading } from "react-is";
+import { Button } from "../ui/button";
+import { useState } from "react";
 
 const formSchema = z.object({
     name: z.string().min(1, {
@@ -25,12 +29,21 @@ const formSchema = z.object({
 
 export const InitialModal = () => {
     const form = useForm({
-
+        resolver: zodResolver(formSchema),
         defaultValues: {
             name: "",
-            imageUrl: ""
-        }
+            imageUrl: "",
+        } 
     });
+
+
+    const isLoading = form.formState.isSubmitting;
+
+    const onSubmit = async(values:z.infer<typeof formSchema>) =>{
+        console.log(values);
+    }
+
+
     return (
         <Dialog open={true}>
             <DialogContent className="bg-white text-black p-0 overflow-hidden">
@@ -41,8 +54,46 @@ export const InitialModal = () => {
                     <DialogDescription className="text-2xl text-center text-zinc-500">
                         you can give some Creative thought to the server how you like
                     </DialogDescription>
-                </DialogHeader>
+                </DialogHeader> 
+                <Form{...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                        <div className="space-y-8 px-6">
+                            <div className="flex items-center justify-center text-center">
+                                TODO: Image upload
+
+                            </div>
+                            <FormField
+                                control={form.control} 
+                                name="name"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel
+                                            className="uppercase text-xs font-bold text-zinc-500 dark:text-secondary/70">
+                                            Server name
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                disabled={isLoading}
+                                                className="bg-zinc-300/50 border-0 focus-visible:ring-0 text-black focus-visible:range-offset-0"
+                                                placeholder="Enter server name"
+                                                {...field}
+
+                                            />
+                                        </FormControl>
+                                    </FormItem>
+                                )}
+                            
+                            />
+                        </div>
+
+                        <DialogFooter className="bg-gray-100 px-6 py-4">
+                                    <Button disabled={isLoading} type="submit">
+                                            Create 
+                                    </Button>
+                        </DialogFooter>
+                    </form>
+                </Form>
             </DialogContent>
         </Dialog>
     )
-}
+} 
